@@ -1,5 +1,7 @@
-# @File : k_means.py
-# @Software: PyCharm
+# -*- coding: utf-8 -*
+# @Time: 2021/6/3 13:40
+# @File : K-means.py
+# 西瓜书习题9.4 编程实现K均值算法
 
 import random
 import matplotlib.pyplot as plt
@@ -9,9 +11,9 @@ import pandas as pd
 
 def k_means(X, n_class=3):
     X_len = len(X)
-    indices = list(range(len(X)))
-    random.shuffle(indices)
-    random_init_avg_vec_index = indices[:n_class]   # 从X中随机选择n_class个样本作为初始均值向量
+    index = list(range(len(X)))
+    random.shuffle(index)
+    random_init_avg_vec_index = index[:n_class]   # 从X中随机选择n_class个样本作为初始均值向量
     print(str(n_class)+"个中心位置分别为:", random_init_avg_vec_index)
     random_init_avg_vec = X[random_init_avg_vec_index, :]
     clusters = {}   # 以字典的形式保存每个簇
@@ -27,7 +29,7 @@ def k_means(X, n_class=3):
         for i in range(n_class):
             clusters[i] = [random_init_avg_vec[i].tolist()]  # 记录每个簇的中心向量
 
-        for i in range(X_len):      # 计算个样本与均值向量之间的距离
+        for i in range(X_len):      # 计算每个样本与均值向量之间的距离
             dists = []
             for item in random_init_avg_vec:
                 dist = np.sqrt(((X[i] - item) ** 2).sum())  # 计算样本和均值向量的闵可夫斯基距离
@@ -39,16 +41,15 @@ def k_means(X, n_class=3):
     return clusters
 
 
-def plot_k_means(clusters, showMid=True):
+def plot_k_means(clusters):
     mid = []
     for key in clusters.keys():
         mid.append(clusters[key][0])
         array = np.asarray(clusters[key])
         plt.scatter(x=array[:, 0], y=array[:, 1], marker='o')
-    if showMid:
-        mid = np.asarray(mid)
-        plt.scatter(x=mid[:, 0], y=mid[:, 1], marker='+', s=500)
 
+    mid = np.asarray(mid)
+    plt.scatter(x=mid[:, 0], y=mid[:, 1], marker='+', s=500)
     plt.show()
 
 
