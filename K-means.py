@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*
-# @Time: 2021/6/3 13:40
+# @Time: 2021/6/10 13:40
 # @File : K-means.py
 # 西瓜书习题9.4 编程实现K均值算法
 
@@ -14,7 +14,8 @@ def k_means(X, n_class=3):
     index = list(range(len(X)))
     random.shuffle(index)
     random_init_avg_vec_index = index[:n_class]   # 从X中随机选择n_class个样本作为初始均值向量
-    print(str(n_class)+"个中心位置分别为:", random_init_avg_vec_index)
+    print(str(n_class)+"个中心位置分别为:", (np.array(random_init_avg_vec_index)+1).tolist())
+    print(X[random_init_avg_vec_index])         # 打印初始中心位置
     random_init_avg_vec = X[random_init_avg_vec_index, :]
     clusters = {}   # 以字典的形式保存每个簇
 
@@ -22,8 +23,9 @@ def k_means(X, n_class=3):
         clusters[i] = [random_init_avg_vec[i].tolist()]     # 初始化每个簇的中心向量
     old_clusters = {0: np.random.normal(0, 0.01, (1, 2))}   # 随机生成一组参考中心
 
+    counter = 0
     while old_clusters != clusters:         # 只要每个簇的中心还在变化，就继续迭代
-
+        counter += 1
         old_clusters = clusters.copy()
         clusters = {}
         for i in range(n_class):
@@ -38,6 +40,7 @@ def k_means(X, n_class=3):
         for key in clusters.keys():
             array = np.asarray(clusters[key])
             random_init_avg_vec[key] = array.sum(axis=0) / len(array)   # 更新每个簇的均值向量
+    print("共迭代"+str(counter)+"次")
     return clusters
 
 
@@ -50,6 +53,7 @@ def plot_k_means(clusters):
 
     mid = np.asarray(mid)
     plt.scatter(x=mid[:, 0], y=mid[:, 1], marker='+', s=500)
+    plt.title("K="+str(len(clusters)))
     plt.show()
 
 
